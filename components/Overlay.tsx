@@ -45,10 +45,10 @@ export default function Overlay() {
             Faiz Jihad Al Baihaqi
           </h1>
           <p className="mt-4 text-xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 font-bold tracking-wide">
-            Creative Fullstack Developer
+            Creative Developer
           </p>
           <p className="mt-6 text-lg md:text-xl text-white/60 font-light max-w-lg mx-auto">
-            "Crafting modern digital experiences."
+            "My Name. Creative Developer."
           </p>
         </motion.div>
 
@@ -58,7 +58,7 @@ export default function Overlay() {
           className="absolute inset-0 flex flex-col justify-center items-start text-left p-8 md:p-24"
         >
           <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-white max-w-2xl drop-shadow-2xl leading-tight">
-            I design scalable web architectures.
+            I build digital experiences.
           </h2>
           <div className="mt-8 flex flex-wrap gap-3 pointer-events-auto">
             {['Laravel', 'React', 'REST APIs', 'Tailwind'].map((tag) => (
@@ -75,7 +75,7 @@ export default function Overlay() {
           className="absolute inset-0 flex flex-col justify-center items-end text-right p-8 md:p-24"
         >
           <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-white max-w-2xl drop-shadow-2xl leading-tight relative group">
-            Exploring the future of <br className="hidden md:block" /> mobile and AI.
+            Bridging design <br className="hidden md:block" /> and engineering.
             <span className="absolute -bottom-2 right-0 w-1/2 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></span>
           </h2>
           <div className="mt-8 flex flex-wrap gap-3 justify-end pointer-events-auto">

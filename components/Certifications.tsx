@@ -1,37 +1,42 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Icon } from '@iconify/react';
 
 const CERTS = [
   {
     title: 'Basic Learning AI',
     issuer: 'Dicoding Indonesia',
-    icon: '🧠',
+    icon: 'hugeicons:ai-brain-02',
     color: 'from-purple-500/15 to-purple-600/5 border-purple-500/25',
+    iconColor: '#c084fc',
     badge: 'AI',
     badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
   },
   {
     title: 'Belajar Penerapan Data Science dengan Microsoft Fabric',
     issuer: 'Microsoft / Dicoding',
-    icon: '📊',
+    icon: 'devicon:microsoftsqlserver-wordmark',
     color: 'from-blue-500/15 to-blue-600/5 border-blue-500/25',
+    iconColor: '#60a5fa',
     badge: 'Data',
     badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
   },
   {
-    title: 'Hafiz 15 Juz Al-Qur\'an',
+    title: "Hafiz 15 Juz Al-Qur'an",
     issuer: 'Islamic Study Program',
-    icon: '📖',
+    icon: 'game-icons:open-book',
     color: 'from-emerald-500/15 to-emerald-600/5 border-emerald-500/25',
+    iconColor: '#34d399',
     badge: 'Life',
     badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
   },
   {
     title: 'English Camp Completion',
     issuer: 'Language Program',
-    icon: '🌐',
+    icon: 'material-symbols:language',
     color: 'from-orange-500/15 to-orange-600/5 border-orange-500/25',
+    iconColor: '#fb923c',
     badge: 'Language',
     badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
   },
@@ -68,9 +73,12 @@ export default function Certifications() {
               {/* Ambient glow on hover */}
               <div className="absolute inset-0 bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl" />
 
-              {/* Icon bubble */}
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-black/30 border border-white/10 flex items-center justify-center text-2xl">
-                {cert.icon}
+              {/* Iconify icon bubble */}
+              <div
+                className="flex-shrink-0 w-14 h-14 rounded-2xl bg-black/30 border border-white/10 flex items-center justify-center"
+                style={{ boxShadow: `0 0 20px ${cert.iconColor}30` }}
+              >
+                <Icon icon={cert.icon} width={28} height={28} color={cert.iconColor} />
               </div>
 
               {/* Text */}

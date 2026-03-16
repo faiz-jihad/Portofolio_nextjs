@@ -7,6 +7,8 @@ import GithubProjects from '@/components/GithubProjects';
 import GithubProfileStats from '@/components/GithubStats';
 import GithubContributionGraph from '@/components/GithubContributionGraph';
 import GithubActivityTimeline from '@/components/GithubActivityTimeline';
+import ScrollyCanvas from '@/components/ScrollyCanvas';
+import Overlay from '@/components/Overlay';
 import { fetchGithubRepositories, calculateGithubStats, fetchPinnedRepositories } from '@/lib/github';
 import { fetchContributionGraph, fetchGithubEvents } from '@/lib/githubActivity';
 import Contact from '@/components/Contact';
@@ -14,7 +16,6 @@ import ScrollProgress from '@/components/ScrollProgress';
 import NanoBanana from '@/components/ui/NanoBanana';
 
 export default async function Home() {
-  // All external data fetched in parallel — zero waterfall
   const [repos, contributions, events, pinned] = await Promise.all([
     fetchGithubRepositories('faiz-jihad'),
     fetchContributionGraph('faiz-jihad'),
@@ -26,6 +27,12 @@ export default async function Home() {
   return (
     <main className="bg-black text-white selection:bg-purple-500/30 selection:text-white">
       <ScrollProgress />
+
+      {/* ── CINEMATIC SCROLLYTELLING (500vh) ─────────────────── */}
+      <div className="relative">
+        <ScrollyCanvas />
+        <Overlay />
+      </div>
 
       {/* ── 1. HERO ──────────────────────────────────────────── */}
       <Hero />

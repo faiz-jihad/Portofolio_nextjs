@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { GithubEvent } from '@/lib/githubActivity';
+import { Icon } from '@iconify/react';
 
 // ── Icons ──────────────────────────────────────────────────────────────────
 const PushIcon = () => (
@@ -25,44 +26,39 @@ const CreateIcon = () => (
   </svg>
 );
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
-function getEventMeta(event: GithubEvent): {
-  icon: React.ReactNode;
-  label: string;
-  color: string;
-} {
+function getEventMeta(event: GithubEvent): { icon: React.ReactNode; label: string; color: string } {
   switch (event.type) {
     case 'PushEvent':
       const commits = event.payload?.commits?.length ?? 0;
       return {
-        icon: <PushIcon />,
+        icon: <Icon icon="mdi:source-commit" width={16} height={16} />,
         label: `Pushed ${commits} commit${commits !== 1 ? 's' : ''} to`,
         color: 'text-purple-400',
       };
     case 'PullRequestEvent':
       const prAction = event.payload?.action ?? 'updated';
       return {
-        icon: <PullRequestIcon />,
+        icon: <Icon icon="mdi:source-pull" width={16} height={16} />,
         label: `${capitalize(prAction)} a pull request in`,
         color: 'text-blue-400',
       };
     case 'IssuesEvent':
       const issueAction = event.payload?.action ?? 'opened';
       return {
-        icon: <IssueIcon />,
+        icon: <Icon icon="mdi:alert-circle-outline" width={16} height={16} />,
         label: `${capitalize(issueAction)} an issue in`,
         color: 'text-yellow-400',
       };
     case 'CreateEvent':
       const ref = event.payload?.ref_type ?? 'repository';
       return {
-        icon: <CreateIcon />,
+        icon: <Icon icon="mdi:plus-circle-outline" width={16} height={16} />,
         label: `Created a new ${ref} in`,
         color: 'text-cyan-400',
       };
     default:
       return {
-        icon: <CreateIcon />,
+        icon: <Icon icon="mdi:github" width={16} height={16} />,
         label: 'Interacted with',
         color: 'text-white/50',
       };
