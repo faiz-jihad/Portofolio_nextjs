@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { fetchGithubRepositories } from '@/lib/github';
 import { supabase } from '@/lib/supabaseClient';
 
+export const dynamic = "force-dynamic"
+
 export async function POST() {
   try {
     const repos = await fetchGithubRepositories('faiz-jihad');
