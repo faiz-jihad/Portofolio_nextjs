@@ -83,6 +83,11 @@ export default function Contact() {
                     <Icon icon="mdi:linkedin" width={24} height={24} />
                     <span className="sr-only">LinkedIn</span>
                 </a>
+
+                <a href="https://www.instagram.com/faizalbaihaqi_/" target="_blank" rel="noreferrer" className="text-white/60 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10 bg-white/5 border border-white/10 backdrop-blur-md">
+                    <Icon icon="mdi:instagram" width={24} height={24} />
+                    <span className="sr-only">Instagram</span>
+                </a>
             </motion.div>
         </div>
 
@@ -107,7 +112,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-light"
-                        placeholder="John Doe"
+                        placeholder="nama kamu"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -120,7 +125,7 @@ export default function Contact() {
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-light"
-                        placeholder="john@example.com"
+                        placeholder="emalmu@gmail.com"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
