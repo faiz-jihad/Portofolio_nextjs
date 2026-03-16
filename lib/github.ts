@@ -18,6 +18,15 @@ export type GithubStats = {
   topLanguages: { language: string; count: number }[];
 };
 
+export type PinnedRepository = {
+  name: string;
+  description: string | null;
+  url: string;
+  primaryLanguage: { name: string; color: string } | null;
+  stargazerCount: number;
+  forkCount: number;
+};
+
 export async function fetchGithubRepositories(username: string = 'faiz-jihad'): Promise<GithubRepository[]> {
   const url = `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`;
   
@@ -78,4 +87,57 @@ export function calculateGithubStats(repos: GithubRepository[]): GithubStats {
     totalStars,
     topLanguages,
   };
+}
+
+// ── Pinned Repositories (via GitHub GraphQL API) ──────────────────────────
+export async function fetchPinnedRepositories(
+  username: string = 'faiz-jihad'
+): Promise<PinnedRepository[]> {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    console.warn('GITHUB_TOKEN is not set. Cannot fetch pinned repositories.');
+    return [];
+  }
+
+  const query = `
+    query {
+      user(login: "${username}") {
+        pinnedItems(first: 6, types: REPOSITORY) {
+          nodes {
+            ... on Repository {
+              name
+              description
+              url
+              primaryLanguage {
+                name
+                color
+              }
+              stargazerCount
+              forkCount
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const res = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) throw new Error(`GraphQL request failed: ${res.statusText}`);
+
+    const json = await res.json();
+    return (json.data?.user?.pinnedItems?.nodes ?? []) as PinnedRepository[];
+  } catch (error) {
+    console.error('Error fetching pinned repositories:', error);
+    return [];
+  }
 }
