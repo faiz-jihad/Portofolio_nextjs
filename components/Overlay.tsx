@@ -40,7 +40,7 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
             Fullstack Developer & AI Engineer
           </p>
           <p className="mt-6 text-lg md:text-xl text-white/60 font-light max-w-lg mx-auto">
-            "My Name is Faiz Jihad Al Baihaqi. Fullstack Developer & AI Engineer."
+            "Informatics Engineering Student"
           </p>
         </motion.div>
 
