@@ -1,8 +1,14 @@
 'use client';
 
+import { memo } from 'react';
 import { useTransform, motion, type MotionValue } from 'framer-motion';
 
-export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+// Move static data out to prevent re-creation on render
+const SECTION2_TAGS = ['Laravel', 'React', 'REST APIs', 'Tailwind'];
+const SECTION3_TAGS = ['Flutter', 'Machine Learning', 'Cloud'];
+
+// Optimized component with memoization
+export default memo(function Overlay({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   // Section 1: 0% to 30%
   const opacity1 = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 1, 0]);
   const y1 = useTransform(scrollYProgress, [0, 0.3], [0, -50]);
@@ -11,12 +17,10 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
   // Section 2: 30% to 60%
   const opacity2 = useTransform(scrollYProgress, [0.3, 0.45, 0.55, 0.6], [0, 1, 1, 0]);
   const x2 = useTransform(scrollYProgress, [0.3, 0.6], [-100, 50]);
-  const blur2 = useTransform(scrollYProgress, [0.3, 0.45], ["blur(10px)", "blur(0px)"]);
 
   // Section 3: 60% to 100%
   const opacity3 = useTransform(scrollYProgress, [0.6, 0.8, 0.9, 1], [0, 1, 1, 0]);
   const x3 = useTransform(scrollYProgress, [0.6, 1], [100, -50]);
-  const blur3 = useTransform(scrollYProgress, [0.6, 0.8], ["blur(10px)", "blur(0px)"]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-[60] flex flex-col font-sans">
@@ -24,8 +28,13 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
         
         {/* Section 1: 0% scroll (Centered) */}
         <motion.div
-          style={{ opacity: opacity1, scale: scale1, y: y1 }}
-          className="absolute inset-0 flex flex-col items-center justify-center text-center"
+          style={{ 
+            opacity: opacity1, 
+            scale: scale1, 
+            y: y1,
+            translateZ: 0 // Force GPU layer
+          }}
+          className="absolute inset-0 flex flex-col items-center justify-center text-center will-change-[transform,opacity]"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -46,14 +55,18 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
 
         {/* Section 2: 30% scroll (Left aligned) */}
         <motion.div
-          style={{ opacity: opacity2, x: x2, filter: blur2 }}
-          className="absolute inset-0 flex flex-col justify-center items-start text-left p-8 md:p-24"
+          style={{ 
+            opacity: opacity2, 
+            x: x2,
+            translateZ: 0 
+          }}
+          className="absolute inset-0 flex flex-col justify-center items-start text-left p-8 md:p-24 will-change-[transform,opacity]"
         >
           <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-white max-w-2xl drop-shadow-2xl leading-tight">
             I build digital experiences.
           </h2>
           <div className="mt-8 flex flex-wrap gap-3 pointer-events-auto">
-            {['Laravel', 'React', 'REST APIs', 'Tailwind'].map((tag) => (
+            {SECTION2_TAGS.map((tag) => (
               <span key={tag} className="px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-sm font-mono text-white/80">
                 {tag}
               </span>
@@ -63,15 +76,19 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
 
         {/* Section 3: 60% scroll (Right aligned) */}
         <motion.div
-          style={{ opacity: opacity3, x: x3, filter: blur3 }}
-          className="absolute inset-0 flex flex-col justify-center items-end text-right p-8 md:p-24"
+          style={{ 
+            opacity: opacity3, 
+            x: x3,
+            translateZ: 0 
+          }}
+          className="absolute inset-0 flex flex-col justify-center items-end text-right p-8 md:p-24 will-change-[transform,opacity]"
         >
           <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-white max-w-2xl drop-shadow-2xl leading-tight relative group">
             Bridging design <br className="hidden md:block" /> and engineering.
             <span className="absolute -bottom-2 right-0 w-1/2 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"></span>
           </h2>
           <div className="mt-8 flex flex-wrap gap-3 justify-end pointer-events-auto">
-             {['Flutter', 'Machine Learning', 'Cloud'].map((tag) => (
+             {SECTION3_TAGS.map((tag) => (
               <span key={tag} className="px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-sm font-mono text-white/80">
                 {tag}
               </span>
@@ -81,4 +98,4 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
       </div>
     </div>
   );
-}
+})

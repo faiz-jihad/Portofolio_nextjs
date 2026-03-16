@@ -9,6 +9,7 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [progress, setProgress] = useState(0); // For better loading feedback
 
   // Map scroll progress to frame index
   const currentIndex = useTransform(scrollYProgress, [0, 1], [0, FRAME_COUNT - 1]);
@@ -24,6 +25,7 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
         img.src = `/sequence/${frameStr}.webp`;
         img.onload = () => {
             loadedCount++;
+            setProgress(Math.round((loadedCount / FRAME_COUNT) * 100));
             if (loadedCount === FRAME_COUNT) {
                 setLoaded(true);
             }
@@ -34,37 +36,40 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
   }, []);
 
   // Function to draw image and maintain object-fit: cover logic
+  // Using useCallback to prevent re-creation but note it depends on window dimensions
   const drawImage = (img: HTMLImageElement) => {
     const canvas = canvasRef.current;
     if (!canvas || !img) return;
     
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false }); // Optimization: disable alpha if possible
     if (!ctx) return;
 
-    // Set internal canvas resolution
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    const canvasRatio = canvas.width / canvas.height;
+    // Only update canvas size if it changed
+    if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+    }
+
+    const canvasRatio = w / h;
     const imgRatio = img.width / img.height;
 
     let renderWidth, renderHeight, xOffset, yOffset;
 
     if (canvasRatio > imgRatio) {
-        // Canvas is wider than image relative to height
-        renderWidth = canvas.width;
+        renderWidth = w;
         renderHeight = renderWidth / imgRatio;
         xOffset = 0;
-        yOffset = (canvas.height - renderHeight) / 2;
+        yOffset = (h - renderHeight) / 2;
     } else {
-        // Canvas is taller than image relative to width
-        renderHeight = canvas.height;
+        renderHeight = h;
         renderWidth = renderHeight * imgRatio;
-        xOffset = (canvas.width - renderWidth) / 2;
+        xOffset = (w - renderWidth) / 2;
         yOffset = 0;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, Math.floor(xOffset), Math.floor(yOffset), Math.floor(renderWidth), Math.floor(renderHeight));
   };
 
@@ -97,16 +102,22 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
   }, [loaded, images, currentIndex]);
 
   return (
-    <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+    <div className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform">
       {/* Loading state indicator */}
       {!loaded && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-0">
-              <p className="text-white text-sm font-mono animate-pulse">Loading Sequence...</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-0">
+              <p className="text-white text-sm font-mono animate-pulse mb-2">Initializing Cinematic Engine...</p>
+              <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                    className="h-full bg-purple-500 transition-all duration-300 ease-out" 
+                    style={{ width: `${progress}%` }} 
+                />
+              </div>
           </div>
       )}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full transform-gpu"
       />
     </div>
   );

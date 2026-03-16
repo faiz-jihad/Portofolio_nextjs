@@ -75,7 +75,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
               className="mb-12 relative"
             >
               <div className="text-6xl md:text-8xl font-black tracking-tighter text-white">
-                FAIZ<span className="text-purple-500">.</span>
+                Hello All<span className="text-purple-500">.</span>
               </div>
               <motion.div 
                 initial={{ width: 0 }}
