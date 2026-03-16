@@ -45,7 +45,7 @@ export default function PinnedProjects({ repos }: { repos: PinnedRepository[] })
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
+          transition={{ type: 'spring', stiffness: 100, damping: 20 }}
           className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4"
         >
           <div>
@@ -75,10 +75,13 @@ export default function PinnedProjects({ repos }: { repos: PinnedRepository[] })
               href={repo.url}
               target="_blank"
               rel="noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ 
+                type: 'spring',
+                stiffness: 100,
+                damping: 20,
+                delay: i * 0.08 
+              }}
               whileHover={{
                 scale: 1.03,
                 y: -6,

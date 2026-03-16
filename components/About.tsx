@@ -36,7 +36,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             className="text-4xl md:text-5xl font-light tracking-tight text-white mb-8 leading-tight"
           >
             Building <span className="font-bold">impactful</span> software from Bandung, Indonesia.
@@ -46,7 +46,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.1 }}
             className="text-white/60 font-light leading-relaxed text-base md:text-lg mb-10"
           >
             I am an Informatics Engineering student passionate about building scalable digital solutions. I specialize in the <span className="text-white/90 font-medium">Laravel</span> and <span className="text-white/90 font-medium">React.js</span> ecosystem, while actively exploring mobile development with <span className="text-white/90 font-medium">Flutter</span> and artificial intelligence to create smarter, data-driven applications.
@@ -56,7 +56,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.2 }}
             className="flex flex-col gap-3 text-sm font-mono"
           >
             {[
@@ -95,7 +95,12 @@ export default function About() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                transition={{ 
+                  type: 'spring', 
+                  stiffness: 200, 
+                  damping: 15, 
+                  delay: i * 0.05 
+                }}
                 whileHover={{ scale: 1.08, y: -2 }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full border bg-gradient-to-br ${tag.color} text-sm font-mono cursor-default backdrop-blur-sm transition-transform`}
               >

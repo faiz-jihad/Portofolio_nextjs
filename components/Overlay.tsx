@@ -1,11 +1,11 @@
 'use client';
 
-import { useTransform, motion, MotionValue } from 'framer-motion';
+import { useTransform, motion, type MotionValue } from 'framer-motion';
 
 export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   // Section 1: 0% to 30%
-  const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 0.3], [50, -50]);
+  const opacity1 = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 1, 0]);
+  const y1 = useTransform(scrollYProgress, [0, 0.3], [0, -50]);
   const scale1 = useTransform(scrollYProgress, [0, 0.3], [1, 1.05]);
 
   // Section 2: 30% to 60%
@@ -19,7 +19,7 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
   const blur3 = useTransform(scrollYProgress, [0.6, 0.8], ["blur(10px)", "blur(0px)"]);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-[500vh] pointer-events-none z-10 flex flex-col font-sans">
+    <div className="absolute inset-0 pointer-events-none z-[60] flex flex-col font-sans">
       <div className="sticky top-0 h-screen flex items-center justify-center p-8 lg:p-24 overflow-hidden">
         
         {/* Section 1: 0% scroll (Centered) */}

@@ -85,7 +85,12 @@ export default function Skills() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.6, delay: ci * 0.1 }}
+              transition={{ 
+                type: 'spring',
+                stiffness: 100,
+                damping: 20,
+                delay: ci * 0.1 
+              }}
               className={`relative rounded-2xl border bg-gradient-to-br p-8 backdrop-blur-xl overflow-hidden group ${cat.color}`}
             >
               {/* Hover glow */}

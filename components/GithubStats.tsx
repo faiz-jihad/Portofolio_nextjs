@@ -109,7 +109,12 @@ export default function GithubProfileStats({ stats }: Props) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: card.delay }}
+              transition={{ 
+                type: 'spring',
+                stiffness: 100,
+                damping: 20,
+                delay: card.delay 
+              }}
               whileHover={{ scale: 1.02, y: -4 }}
               className="relative group bg-white/[0.03] border border-white/8 backdrop-blur-xl rounded-2xl p-7 flex items-center gap-5 overflow-hidden cursor-default"
             >
