@@ -23,17 +23,29 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
         const img = new Image();
         const frameStr = String(i).padStart(4, '0');
         img.src = `/sequence/${frameStr}.webp`;
+        
         img.onload = () => {
             loadedCount++;
             setProgress(Math.round((loadedCount / FRAME_COUNT) * 100));
-            if (loadedCount === FRAME_COUNT) {
+            // Set loaded to true if we have at least 10 frames or all frames
+            // This prevents being stuck if some high-res frames fail on slow networks
+            if (loadedCount >= Math.min(FRAME_COUNT, 20) && !loaded) {
                 setLoaded(true);
             }
         };
+
+        img.onerror = () => {
+            console.error(`Failed to load frame: ${frameStr}`);
+            loadedCount++; // Still increment to allow progress to move
+            if (loadedCount >= Math.min(FRAME_COUNT, 20) && !loaded) {
+                setLoaded(true);
+            }
+        };
+
         imgArray.push(img);
     }
     setImages(imgArray);
-  }, []);
+  }, [loaded]);
 
   // Function to draw image and maintain object-fit: cover logic
   // Using useCallback to prevent re-creation but note it depends on window dimensions
@@ -102,7 +114,7 @@ export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: Mo
   }, [loaded, images, currentIndex]);
 
   return (
-    <div className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform">
+    <div className="sticky top-0 h-screen w-full overflow-hidden bg-black will-change-transform z-0">
       {/* Loading state indicator */}
       {!loaded && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-0">
