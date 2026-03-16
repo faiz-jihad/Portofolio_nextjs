@@ -1,4 +1,3 @@
-import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Skills from '@/components/Skills';
 import Certifications from '@/components/Certifications';
@@ -7,13 +6,13 @@ import GithubProjects from '@/components/GithubProjects';
 import GithubProfileStats from '@/components/GithubStats';
 import GithubContributionGraph from '@/components/GithubContributionGraph';
 import GithubActivityTimeline from '@/components/GithubActivityTimeline';
-import ScrollyCanvas from '@/components/ScrollyCanvas';
-import Overlay from '@/components/Overlay';
-import { fetchGithubRepositories, calculateGithubStats, fetchPinnedRepositories } from '@/lib/github';
-import { fetchContributionGraph, fetchGithubEvents } from '@/lib/githubActivity';
+import CinematicScroll from '@/components/CinematicScroll';
 import Contact from '@/components/Contact';
 import ScrollProgress from '@/components/ScrollProgress';
 import NanoBanana from '@/components/ui/NanoBanana';
+import { fetchGithubRepositories, calculateGithubStats, fetchPinnedRepositories } from '@/lib/github';
+import { fetchContributionGraph, fetchGithubEvents } from '@/lib/githubActivity';
+import PageClient from '../components/PageClient';
 
 export default async function Home() {
   const [repos, contributions, events, pinned] = await Promise.all([
@@ -25,36 +24,30 @@ export default async function Home() {
   const stats = calculateGithubStats(repos);
 
   return (
-    <main className="bg-black text-white selection:bg-purple-500/30 selection:text-white">
+    <PageClient>
       <ScrollProgress />
 
       {/* ── CINEMATIC SCROLLYTELLING (500vh) ─────────────────── */}
-      <div className="relative">
-        <ScrollyCanvas />
-        <Overlay />
-      </div>
+      <CinematicScroll />
 
-      {/* ── 1. HERO ──────────────────────────────────────────── */}
-      <Hero />
-
-      {/* ── 2. ABOUT ─────────────────────────────────────────── */}
-      <About />
-
-      {/* ── 3. SKILLS ────────────────────────────────────────── */}
-      <Skills />
-
-      {/* ── 4. GITHUB STATS ──────────────────────────────────── */}
-      <GithubProfileStats stats={stats} />
-
-      {/* ── 5. PINNED PROJECTS ───────────────────────────────── */}
+      {/* ── 1. PINNED PROJECTS ───────────────────────────────── */}
       <div id="projects">
         <PinnedProjects repos={pinned} />
       </div>
 
-      {/* ── 6. ALL OPEN-SOURCE REPOS ─────────────────────────── */}
+      {/* ── 2. GITHUB STATS ──────────────────────────────────── */}
+      <GithubProfileStats stats={stats} />
+
+      {/* ── 3. ALL OPEN-SOURCE REPOS ─────────────────────────── */}
       <GithubProjects repos={repos} />
 
-      {/* ── 7. GITHUB ACTIVITY PANEL ─────────────────────────── */}
+      {/* ── 4. ABOUT ─────────────────────────────────────────── */}
+      <About />
+
+      {/* ── 5. SKILLS ────────────────────────────────────────── */}
+      <Skills />
+
+      {/* ── 6. GITHUB ACTIVITY PANEL ─────────────────────────── */}
       <section className="relative py-24 px-8 lg:px-24 flex flex-col items-center bg-black">
         <div className="max-w-7xl w-full">
           <div className="mb-12">
@@ -78,15 +71,15 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── 8. CERTIFICATIONS ────────────────────────────────── */}
+      {/* ── 7. CERTIFICATIONS ────────────────────────────────── */}
       <Certifications />
 
-      {/* ── 9. CONTACT ───────────────────────────────────────── */}
+      {/* ── 8. CONTACT ───────────────────────────────────────── */}
       <div id="contact">
         <Contact />
       </div>
 
       <NanoBanana />
-    </main>
+    </PageClient>
   );
 }

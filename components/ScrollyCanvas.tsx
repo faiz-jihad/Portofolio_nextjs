@@ -1,21 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { useTransform, useMotionValueEvent, MotionValue } from 'framer-motion';
 
 const FRAME_COUNT = 120; // Extracted 120 frames
 
-export default function ScrollyCanvas() {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function ScrollyCanvas({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [loaded, setLoaded] = useState(false);
-
-  // Framer Motion scroll hook
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
 
   // Map scroll progress to frame index
   const currentIndex = useTransform(scrollYProgress, [0, 1], [0, FRAME_COUNT - 1]);
@@ -104,19 +97,17 @@ export default function ScrollyCanvas() {
   }, [loaded, images, currentIndex]);
 
   return (
-    <div ref={containerRef} className="relative h-[500vh] bg-black">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Loading state indicator */}
-        {!loaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black z-0">
-                <p className="text-white text-sm font-mono animate-pulse">Loading Sequence...</p>
-            </div>
-        )}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-        />
-      </div>
+    <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+      {/* Loading state indicator */}
+      {!loaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-0">
+              <p className="text-white text-sm font-mono animate-pulse">Loading Sequence...</p>
+          </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+      />
     </div>
   );
 }

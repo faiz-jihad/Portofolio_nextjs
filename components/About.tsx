@@ -1,18 +1,19 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Icon } from '@iconify/react';
 
 const SKILL_TAGS = [
-  { label: 'Laravel', color: 'from-red-500/20 to-red-600/10 border-red-500/30 text-red-300' },
-  { label: 'React.js', color: 'from-cyan-500/20 to-cyan-600/10 border-cyan-500/30 text-cyan-300' },
-  { label: 'Next.js', color: 'from-white/10 to-white/5 border-white/20 text-white/70' },
-  { label: 'Flutter', color: 'from-blue-500/20 to-blue-600/10 border-blue-500/30 text-blue-300' },
-  { label: 'PHP', color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/30 text-indigo-300' },
-  { label: 'Supabase', color: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/30 text-emerald-300' },
-  { label: 'Tailwind CSS', color: 'from-sky-500/20 to-sky-600/10 border-sky-500/30 text-sky-300' },
-  { label: 'AI / ML', color: 'from-purple-500/20 to-purple-600/10 border-purple-500/30 text-purple-300' },
-  { label: 'Data Science', color: 'from-yellow-500/20 to-yellow-600/10 border-yellow-500/30 text-yellow-300' },
-  { label: 'REST APIs', color: 'from-orange-500/20 to-orange-600/10 border-orange-500/30 text-orange-300' },
+  { label: 'Laravel',      icon: 'devicon:laravel',         color: 'from-red-500/20 to-red-600/10 border-red-500/30 text-red-300' },
+  { label: 'React.js',     icon: 'devicon:react',           color: 'from-cyan-500/20 to-cyan-600/10 border-cyan-500/30 text-cyan-300' },
+  { label: 'Next.js',      icon: 'devicon:nextjs',          color: 'from-white/10 to-white/5 border-white/20 text-white/70' },
+  { label: 'Flutter',      icon: 'devicon:flutter',         color: 'from-blue-500/20 to-blue-600/10 border-blue-500/30 text-blue-300' },
+  { label: 'PHP',          icon: 'devicon:php',             color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/30 text-indigo-300' },
+  { label: 'Supabase',     icon: 'devicon:supabase',        color: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/30 text-emerald-300' },
+  { label: 'Tailwind CSS', icon: 'devicon:tailwindcss',     color: 'from-sky-500/20 to-sky-600/10 border-sky-500/30 text-sky-300' },
+  { label: 'AI / ML',      icon: 'mdi:brain',               color: 'from-purple-500/20 to-purple-600/10 border-purple-500/30 text-purple-300' },
+  { label: 'Data Science', icon: 'mdi:chart-scatter-plot',  color: 'from-yellow-500/20 to-yellow-600/10 border-yellow-500/30 text-yellow-300' },
+  { label: 'REST APIs',    icon: 'mdi:api',                 color: 'from-orange-500/20 to-orange-600/10 border-orange-500/30 text-orange-300' },
 ];
 
 export default function About() {
@@ -59,13 +60,16 @@ export default function About() {
             className="flex flex-col gap-3 text-sm font-mono"
           >
             {[
-              { label: 'Location', value: '📍 Bandung, Indonesia' },
-              { label: 'Status', value: '🎓 Informatics Engineering Student' },
-              { label: 'Languages', value: '🌐 Bahasa Indonesia · English (Limited)' },
+              { label: 'Location',  icon: 'mdi:map-marker-outline',       value: 'Bandung, Indonesia' },
+              { label: 'Status',    icon: 'mdi:school-outline',            value: 'Informatics Engineering Student' },
+              { label: 'Languages', icon: 'mdi:web',                      value: 'Bahasa Indonesia · English (Limited)' },
             ].map(item => (
               <div key={item.label} className="flex gap-4 items-center">
                 <span className="text-white/30 w-20 flex-shrink-0">{item.label}</span>
-                <span className="text-white/70">{item.value}</span>
+                <span className="flex items-center gap-1.5 text-white/70">
+                  <Icon icon={item.icon} width={14} height={14} className="text-purple-400/70" />
+                  {item.value}
+                </span>
               </div>
             ))}
           </motion.div>
@@ -93,8 +97,9 @@ export default function About() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 whileHover={{ scale: 1.08, y: -2 }}
-                className={`px-4 py-2 rounded-full border bg-gradient-to-br ${tag.color} text-sm font-mono cursor-default backdrop-blur-sm transition-transform`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full border bg-gradient-to-br ${tag.color} text-sm font-mono cursor-default backdrop-blur-sm transition-transform`}
               >
+                <Icon icon={tag.icon} width={14} height={14} />
                 {tag.label}
               </motion.span>
             ))}

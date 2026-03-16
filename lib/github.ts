@@ -15,6 +15,7 @@ export type GithubRepository = {
 export type GithubStats = {
   totalRepos: number;
   totalStars: number;
+  totalForks: number;
   topLanguages: { language: string; count: number }[];
 };
 
@@ -46,8 +47,7 @@ export async function fetchGithubRepositories(username: string = 'faiz-jihad'): 
     const repos: any[] = await res.json();
 
     return repos
-      .filter((repo) => !repo.fork) // Exclude forks
-      .filter((repo) => !!repo.description) // Only show repos with description
+      .filter((repo) => !repo.fork) // Exclude forks only
       .map((repo) => ({
         id: repo.id,
         name: repo.name,
@@ -69,7 +69,8 @@ export async function fetchGithubRepositories(username: string = 'faiz-jihad'): 
 export function calculateGithubStats(repos: GithubRepository[]): GithubStats {
   const totalRepos = repos.length;
   const totalStars = repos.reduce((acc, repo) => acc + repo.stargazers_count, 0);
-  
+  const totalForks = repos.reduce((acc, repo) => acc + repo.forks_count, 0);
+
   const languageCounts = repos.reduce((acc, repo) => {
     if (repo.language) {
       acc[repo.language] = (acc[repo.language] || 0) + 1;
@@ -80,13 +81,9 @@ export function calculateGithubStats(repos: GithubRepository[]): GithubStats {
   const topLanguages = Object.entries(languageCounts)
     .map(([language, count]) => ({ language, count }))
     .sort((a, b) => b.count - a.count)
-    .slice(0, 3); // Get top 3 languages
+    .slice(0, 5); // Top 5 languages
 
-  return {
-    totalRepos,
-    totalStars,
-    topLanguages,
-  };
+  return { totalRepos, totalStars, totalForks, topLanguages };
 }
 
 // ── Pinned Repositories (via GitHub GraphQL API) ──────────────────────────

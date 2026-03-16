@@ -1,16 +1,8 @@
 'use client';
 
-import { useScroll, useTransform, motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useTransform, motion, MotionValue } from 'framer-motion';
 
-export default function Overlay() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
+export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   // Section 1: 0% to 30%
   const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25, 0.3], [0, 1, 1, 0]);
   const y1 = useTransform(scrollYProgress, [0, 0.3], [50, -50]);
@@ -27,7 +19,7 @@ export default function Overlay() {
   const blur3 = useTransform(scrollYProgress, [0.6, 0.8], ["blur(10px)", "blur(0px)"]);
 
   return (
-    <div ref={containerRef} className="absolute top-0 left-0 w-full h-[500vh] pointer-events-none z-10 flex flex-col font-sans">
+    <div className="absolute top-0 left-0 w-full h-[500vh] pointer-events-none z-10 flex flex-col font-sans">
       <div className="sticky top-0 h-screen flex items-center justify-center p-8 lg:p-24 overflow-hidden">
         
         {/* Section 1: 0% scroll (Centered) */}
@@ -42,13 +34,13 @@ export default function Overlay() {
             className="absolute -inset-20 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none"
           />
           <h1 className="relative text-5xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl">
-            Faiz Jihad Al Baihaqi
+            Hello, I'm Faiz 
           </h1>
           <p className="mt-4 text-xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 font-bold tracking-wide">
-            Creative Developer
+            Fullstack Developer & AI Engineer
           </p>
           <p className="mt-6 text-lg md:text-xl text-white/60 font-light max-w-lg mx-auto">
-            "My Name. Creative Developer."
+            "My Name is Faiz Jihad Al Baihaqi. Fullstack Developer & AI Engineer."
           </p>
         </motion.div>
 

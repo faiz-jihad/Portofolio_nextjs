@@ -1,121 +1,166 @@
 'use client';
 
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { GithubRepository } from '@/lib/github';
+import { Icon } from '@iconify/react';
 
-const ProjectCard = ({ repo, index }: { repo: GithubRepository, index: number }) => {
+// ── Language colour map ────────────────────────────────────────────────────
+const LANGUAGE_COLORS: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Python: '#3572A5',
+  Dart: '#00B4AB',
+  PHP: '#4F5D95',
+  Blade: '#f7523f',
+  'C++': '#f34b7d',
+  Ruby: '#701516',
+  Go: '#00ADD8',
+  Rust: '#dea584',
+  Swift: '#F05138',
+  Kotlin: '#A97BFF',
+  HTML: '#e34c26',
+  CSS: '#563d7c',
+  Shell: '#89e051',
+  Vue: '#41b883',
+};
+
+// ── Single card ────────────────────────────────────────────────────────────
+function RepoCard({ repo }: { repo: GithubRepository }) {
+  const col = repo.language ? (LANGUAGE_COLORS[repo.language] ?? '#888') : null;
+
   return (
-    <motion.a
+    <a
       href={repo.html_url}
       target="_blank"
       rel="noreferrer"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ 
-        scale: 1.02,
-        y: -5,
-        boxShadow: "0 0 40px rgba(139, 92, 246, 0.2)",
-        borderColor: "rgba(255, 255, 255, 0.4)"
-      }}
-      className="group relative flex flex-col justify-between overflow-hidden cursor-pointer
-                 bg-white/[0.03] backdrop-blur-2xl border border-white/10 transition-all duration-500 rounded-xl p-6 md:p-8"
-      style={{ minHeight: '280px' }}
+      className="group flex-shrink-0 w-72 flex flex-col gap-3 rounded-xl p-5 border border-white/8 bg-white/[0.03] backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]"
+      style={{ minHeight: '160px' }}
     >
-      {/* Glow Effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"/>
-      
-      <div className="relative z-10 flex flex-col h-full">
-        <div className="flex justify-between items-start mb-4">
-          <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-cyan-400 transition-colors">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <Icon icon="mdi:source-repository" width={14} height={14} className="text-purple-400/50 flex-shrink-0" />
+          <span className="text-sm font-semibold text-white group-hover:text-purple-300 transition-colors truncate">
             {repo.name}
-          </h3>
-          <svg className="w-5 h-5 text-white/40 group-hover:text-white transform group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </span>
         </div>
-        
-        <p className="text-sm text-white/60 font-light leading-relaxed flex-grow line-clamp-3 mb-6">
-            {repo.description}
-        </p>
+        <Icon icon="mdi:arrow-top-right" width={12} height={12} className="text-white/20 group-hover:text-white/60 flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+      </div>
 
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-center gap-4">
-            {repo.language && (
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-purple-400 to-cyan-400"></span>
-                <span className="text-xs font-mono text-white/70 uppercase tracking-widest">{repo.language}</span>
-              </div>
-            )}
+      {/* Description */}
+      <p className="text-xs text-white/45 font-light leading-relaxed flex-grow line-clamp-2">
+        {repo.description || <span className="italic text-white/20">No description.</span>}
+      </p>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between mt-auto">
+        {col ? (
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: col, boxShadow: `0 0 4px ${col}90` }} />
+            <span className="text-[10px] font-mono text-white/50">{repo.language}</span>
           </div>
-          
-          <div className="flex gap-3 text-white/50 text-xs font-mono">
-            <div className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
-              <span>{repo.stargazers_count}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              <span>{repo.forks_count}</span>
-            </div>
-          </div>
+        ) : <span />}
+
+        <div className="flex gap-2.5 text-white/30 text-[10px] font-mono">
+          <span className="flex items-center gap-0.5">
+            <Icon icon="mdi:star-outline" width={11} height={11} />
+            {repo.stargazers_count}
+          </span>
+          <span className="flex items-center gap-0.5">
+            <Icon icon="mdi:source-fork" width={11} height={11} />
+            {repo.forks_count}
+          </span>
         </div>
       </div>
-    </motion.a>
+    </a>
   );
-};
+}
 
-export default function GithubProjects({ repos }: { repos: GithubRepository[] }) {
-  const featured = repos.filter(repo => repo.topics.includes('featured'));
-  
-  // Show projects that are either not featured, or if none are featured, show all.
-  const others = featured.length > 0 ? repos.filter(repo => !repo.topics.includes('featured')) : repos;
+// ── Marquee row ────────────────────────────────────────────────────────────
+function MarqueeRow({ repos, direction = 1, speed = 40 }: { repos: GithubRepository[]; direction?: 1 | -1; speed?: number }) {
+  // Duplicate for seamless loop
+  const doubled = [...repos, ...repos];
+  const totalCards = repos.length;
+  // Each card is 288px (w-72) + 16px gap = 304px
+  const totalWidth = totalCards * 304;
+  const duration = totalWidth / speed;
 
   return (
-    <section className="relative min-h-screen bg-black text-white py-32 px-8 lg:px-24 flex flex-col items-center">
-      <div className="max-w-7xl w-full">
-        
-        {featured.length > 0 && (
-          <div className="mb-24">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
-              className="mb-12"
-            >
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-                Featured <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Projects</span>
-              </h2>
-            </motion.div>
+    <div className="relative flex overflow-hidden">
+      {/* Left fade */}
+      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      {/* Right fade */}
+      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-              {featured.map((repo, i) => (
-                <ProjectCard key={repo.id} repo={repo} index={i} />
-              ))}
-            </div>
-          </div>
-        )}
+      <motion.div
+        className="flex gap-4 py-2"
+        animate={{ x: direction === 1 ? [0, -totalWidth] : [-totalWidth, 0] }}
+        transition={{
+          duration,
+          ease: 'linear',
+          repeat: Infinity,
+          repeatType: 'loop',
+        }}
+      >
+        {doubled.map((repo, i) => (
+          <RepoCard key={`${repo.id}-${i}`} repo={repo} />
+        ))}
+      </motion.div>
+    </div>
+  );
+}
 
-        <div>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="mb-12"
-          >
+// ── Main component ─────────────────────────────────────────────────────────
+export default function GithubProjects({ repos }: { repos: GithubRepository[] }) {
+  if (!repos || repos.length === 0) return null;
+
+  // Split into two rows; alternate direction for visual effect
+  const mid = Math.ceil(repos.length / 2);
+  const row1 = repos.slice(0, mid);
+  const row2 = repos.slice(mid);
+
+  return (
+    <section className="relative bg-black text-white py-24 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/3 w-96 h-96 bg-purple-600/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/3 w-80 h-80 bg-cyan-600/8 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="px-8 lg:px-24 mb-10 flex items-end justify-between flex-wrap gap-4"
+        >
+          <div>
+            <p className="text-xs font-mono uppercase tracking-[0.3em] text-purple-400 mb-3">Open Source</p>
             <h2 className="text-4xl md:text-5xl font-light tracking-tight">
-              Open Source <span className="font-bold">Repositories</span>
+              All <span className="font-bold">Repositories</span>
+              <span className="ml-3 text-lg font-mono text-white/25">({repos.length})</span>
             </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-            {others.slice(0, 9).map((repo, i) => ( // Show at most 9 other repositories
-              <ProjectCard key={repo.id} repo={repo} index={i} />
-            ))}
           </div>
-        </div>
+          <a
+            href="https://github.com/faiz-jihad?tab=repositories"
+            target="_blank"
+            rel="noreferrer"
+            className="group flex items-center gap-1.5 text-xs font-mono text-white/35 hover:text-white transition-colors"
+          >
+            <Icon icon="mdi:github" width={14} height={14} />
+            View all on GitHub
+            <Icon icon="mdi:arrow-right" width={12} height={12} className="group-hover:translate-x-1 transition-transform" />
+          </a>
+        </motion.div>
 
+        {/* Carousel rows */}
+        <div className="flex flex-col gap-4">
+          <MarqueeRow repos={row1} direction={1} speed={35} />
+          {row2.length > 0 && <MarqueeRow repos={row2} direction={-1} speed={28} />}
+        </div>
       </div>
     </section>
   );
