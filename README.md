@@ -4,8 +4,8 @@
 Building scalable web, mobile, and AI-powered applications.
 
 # WEB
-www.faiz-jihad.vercel.app
-
+[www.faiz-jihad.vercel.app
+](https://faiz-jihad.vercel.app/)
 ---
 
 # 🌌 Cinematic Developer Portfolio
